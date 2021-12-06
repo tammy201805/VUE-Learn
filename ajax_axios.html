@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="watch-example">
+        <p>Ask a yes/no question:
+            <input v-model='question'>
+        </p>
+        <p>{{ answer }}</p>
+    </div>
+
+    <script>
+        const WatchExample = {
+            data() {
+                return {
+                    question: '',
+                    answer: 'Questions usually contain a question mark. ;-)',
+                }
+            },
+            watch: {
+                //每当 question 发生变化时，该函数将会执行
+                question(newQuestion, oldQuestion) {
+                    if (newQuestion.indexOf('?') > -1) {
+                        this.getAnswer()
+                    }
+
+                }
+            },
+            methods: {
+                getAnswer() {
+                    this.answer = '思考中...'
+                    axios
+                        .get('https://yesno.wtf/api')
+                        .then(response => {
+                            this.answer = response.data.forced
+                        })
+                        .catch(error => {
+                            this.answer = "绞尽脑汁也想不出答案(T_T) " + error
+                        })
+                }
+            }
+
+        }
+        const app = Vue.createApp(WatchExample)
+        vm = app.mount('#watch-example')
+    </script>
+</body>
+
+</html>
