@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue learn</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="todo-list" class="demo">
+        <form @submit.prevent='addNewTodo'>
+            <label for="todo">添加新日程</label>
+            <input id="todo" v-model='newTodoText' placeholder="待做事项">
+            <button>添加</button>
+        </form>
+        <ul>
+            <todo-item v-for='(todo,index) in todos' :title='todo.title' :key='todo.id' @click='todos.splice(index,1)'>
+            </todo-item>
+        </ul>
+    </div>
+    <script>
+        const todoList = {
+            data() {
+                return {
+                    todos: [{
+                        id: 1,
+                        title: '洗衣服'
+                    }, {
+                        id: 2,
+                        title: '晒被子'
+                    }, {
+                        id: 3,
+                        title: '看书'
+                    }],
+                    nextTodoId: 4,
+                }
+            },
+            methods: {
+                addNewTodo() {
+                    this.todos.push({
+                        id: this.nextTodoId++,
+                        title: this.newTodoText
+                    })
+                    this.newTodoText = ''
+                }
+
+            }
+        }
+        const app = Vue.createApp(todoList)
+        app.component('todo-item', {
+            template: `
+            <li>
+                {{title}}
+                <button @click='$emit("remove")'>已完成</button>
+            </li>`,
+            props: ['title'],
+            emits: ['remove']
+        })
+        app.mount('#todo-list')
+    </script>
+</body>
+
+</html>
