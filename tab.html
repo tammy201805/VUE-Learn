@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+</head>
+
+<body>
+    <div id="test" class="demo">
+        <button v-for='tab in tabs' :key='tab' @click='currentTab = tab' :class='["tab-button",{
+active:currentTab === tab
+        }]'>
+    {{tab}}
+</button>
+        <component :is='currentTabComponent'></component>
+    </div>
+    <script>
+        const Test = {
+            data() {
+                return {
+                    tabs: ['home', 'post', 'archive'],
+                    currentTab: 'home'
+                }
+            },
+            computed: {
+                currentTabComponent() {
+                    return 'tab-' + this.currentTab
+                }
+            }
+        }
+        const app = Vue.createApp(Test)
+        app.component('tab-home', {
+            template: `<div class="demo-tab">首页模块</div>`
+        })
+        app.component('tab-post', {
+            template: `<div class="demo-tab">发文模块</div>`
+        })
+        app.component('tab-archive', {
+            template: `<div class="demo-tab">归档模块</div>`
+        })
+        app.mount('#test')
+    </script>
+</body>
+
+</html>
