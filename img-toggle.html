@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h3>Hover us</h3>
+        <main>
+            <app-child>
+                <img src="./img/2.jpg" alt="扒火车的女人">
+            </app-child>
+            <app-child>
+                <img src="./img/3.jpg" alt="与丧尸共饮的女人">
+            </app-child>
+        </main>
+    </div>
+    <script>
+        const App = {
+
+        }
+        const app = Vue.createApp(App)
+        app.component('app-child', {
+            template: `    
+            <div class="img-contain">
+            <div class="overlay">
+        <p class="overlay-text">还有更多奇妙内容</p>
+        <button @click='toggleShow'>换一张</button>
+    </div>
+    <transition name='flip' mode='out-in'>
+        <slot v-if='!isShowing'></slot>
+        <img v-else src="./img/1.jpg" alt="精彩美图尽在银基">
+    </transition></div>`,
+            data() {
+
+                return {
+                    isShowing: false,
+                }
+
+            },
+            methods: {
+                toggleShow() {
+                    this.isShowing = !this.isShowing
+                }
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
