@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="number" step="20" v-model.number='firstNumber'> +
+        <input type="number" step="20" v-model.number='secondNumber'> = {{result}}
+        <p>
+            <animated-intrige :value='firstNumber'></animated-intrige>+
+            <animated-intrige :value='secondNumber'></animated-intrige> =
+            <animated-intrige :value='result'></animated-intrige>
+        </p>
+    </div>
+    <script>
+        const App = {
+            data() {
+                return {
+                    firstNumber: 20,
+                    secondNumber: 20
+                }
+            },
+            computed: {
+                result() {
+                    return this.firstNumber + this.secondNumber
+                }
+            }
+        }
+        const app = Vue.createApp(App)
+        app.component('animated-intrige', {
+            template: ` <span>{{fullValue}}</span>`,
+            props: {
+                value: {
+                    type: Number,
+                    required: true
+                }
+            },
+            data() {
+                return {
+                    originValue: 0
+                }
+            },
+            computed: {
+                fullValue() {
+                    return Math.floor(this.originValue)
+                }
+            },
+            // methods: {
+            //     tween(newValue, oldValue) {
+            //         gsap.to(this.$data, {
+            //             duration: .5,
+            //             originValue: newValue,
+            //             ease: 'sine'
+            //         })
+            //     }
+            // },
+            // watch: {
+            //     value(newValue, oldValue) {
+            //         this.tween(newValue, oldValue)
+            //     }
+            // },
+            methods: {
+                counter(newValue, oldValue) {
+                    this.originValue = newValue
+                }
+            },
+            watch: {
+                value(newValue, oldValue) {
+                    this.counter(newValue, oldValue)
+                }
+            },
+            mounted() {
+                this.counter(this.value, 0)
+            }
+
+        })
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
