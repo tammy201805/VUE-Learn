@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="number" step='20' v-model.number='number'>
+        <p>{{numberShow}}</p>
+    </div>
+    <script>
+        const App = {
+            data() {
+                return {
+                    number: 0,
+                    originNumber: 0
+                }
+            },
+            computed: {
+                numberShow() {
+                    return this.originNumber.toFixed(0)
+                }
+            },
+            watch: {
+                number(newValue) {
+                    gsap.to(this.$data, {
+                        duration: .5,
+                        originNumber: newValue
+                    })
+                }
+            }
+        }
+        const app = Vue.createApp(App)
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
