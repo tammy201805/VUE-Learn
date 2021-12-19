@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model='search'>
+        <transition-group name='search-list' tag='ul' :css='false' @before-enter='beforeEnter' @enter='enter' @leave='leave'>
+            <li v-for='(item,index) in listComputed' :key='item.msg' :data-index='index'>{{item.msg}}</li>
+        </transition-group>
+    </div>
+    <script>
+        const App = {
+            data() {
+                return {
+                    search: '',
+                    list: [{
+                        msg: 'Bruce Lee'
+                    }, {
+                        msg: 'Jackie Chan'
+                    }, {
+                        msg: 'Chuck Norris'
+                    }, {
+                        msg: 'Jet Li'
+                    }, {
+                        msg: 'Kung Fury'
+                    }]
+                }
+            },
+            computed: {
+                listComputed() {
+                    return this.list.filter(item => {
+                        return item.msg.toLowerCase().indexOf(this.search.toLowerCase()) != -1
+                    })
+                }
+            },
+            methods: {
+                beforeEnter(el) {
+                    el.style.opacity = 0
+                    el.style.height = 0
+                },
+                enter(el, done) {
+                    gsap.to(el, {
+                        opacity: 1,
+                        height: '1.6em',
+                        delay: el.dataset.index * 0.15,
+                        onComplete: done
+                    })
+                },
+                leave(el, done) {
+                    gsap.to(el, {
+                        opacity: 0,
+                        height: 0,
+                        delay: el.dataset.index * 0.15,
+                        onComplete: done
+                    })
+                }
+            }
+        }
+        const app = Vue.createApp(App)
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
