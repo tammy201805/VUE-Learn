@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="number" v-model.number='firNum' step="20">+
+        <input type="number" v-model.number='secNum' step="20">= {{result}}<br>
+        <num-trige :value='firNum'></num-trige>+
+        <num-trige :value='secNum'></num-trige>=
+        <num-trige :value='result'></num-trige>
+    </div>
+    <script>
+        const App = {
+
+            data() {
+                return {
+                    firNum: 20,
+                    secNum: 20
+                }
+            },
+            computed: {
+                result() {
+                    return this.firNum + this.secNum
+                }
+            }
+        }
+        const app = Vue.createApp(App)
+        app.component('num-trige', {
+            template: `<span>{{resNum}}</span>`,
+            props: {
+                value: {
+                    type: Number,
+                    required: true
+                }
+            },
+            data() {
+                return {
+                    originNum: 0,
+                }
+            },
+            computed: {
+                resNum() {
+                    return Math.floor(this.originNum)
+                }
+            },
+            methods: {
+                tween(newValue, oldValue) {
+                    gsap.to(this.$data, {
+                        duration: .5,
+                        originNum: newValue
+                    })
+                }
+            },
+            watch: {
+                value(newValue, oldValue) {
+                    this.tween(newValue, oldValue)
+
+                }
+            },
+            mounted() {
+                this.tween(this.value, 0)
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+
+</html>
