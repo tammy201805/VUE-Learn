@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE Learn</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <svg width='200' height='200'>
+            <polygon :points='points'></polygon>
+            <circle cx='100' cy='100' r="90"></circle>
+        </svg>
+        <label>Sides:{{sides}}</label>
+        <input type="range" min='3' max='500' v-model.number='sides'>
+    </div>
+    <script>
+        const App = {
+            data() {
+                return {
+                    sides: 4,
+                    list: []
+                }
+            },
+            methods: {
+                newList() {
+                    for (var i = 1; i <= this.sides; i++) {
+                        point = Math.floor(i * Math.random() * 100) + ',' + Math.floor(i * Math.random() * 100)
+                        this.list.push(point)
+                    }
+                }
+            },
+            computed: {
+                points() {
+                    this.list = [];
+                    this.newList()
+                    return this.list.join(' ')
+                }
+
+            }
+        }
+        const app = Vue.createApp(App)
+        const vm = app.mount('#app')
+        console.log(vm.list)
+        console.log(vm.sides)
+    </script>
+</body>
+
+</html>
